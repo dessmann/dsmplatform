@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">lib_dsm_platform</string>
+    <string name="server_error">服务器异常</string>
+    <string name="system_error">系统异常</string>
+    <string name="network_error">网络连接异常，请检查网络</string>
+    <string name="please_check_context_param">请检查上下文参数</string>
+    <string name="not_found_wifi">没有扫描到指定的wifi</string>
+    <string name="connect_wifi_failure">wifi连接失败</string>
+    <string name="wifi_pwd_check_error">wifi密码错误</string>
+    <string name="please_check_wifi_pwd">请检查wifi密码</string>
+    <string name="please_check_wifi_ssid">请检查wifi wifiSSID</string>
+    <string name="add_wifi_config_failure">添加wifi配置失败</string>
+    <string name="check_wifi_config_timeout">检测wifi配置超时</string>
+    <string name="permission_storage">正在请求读写权限</string>
+    <string name="explain_read_contact_permission">从通讯录中读取联系人信息需要访问通讯录权限</string>
+    <string name="read_contact_list_permission_deny">已禁止读取通讯录</string>
+    <string name="download_failure_please_check_network">下载文件失败，请检查网络</string>
+</resources>
