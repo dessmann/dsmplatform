@@ -18,7 +18,7 @@ import net.tsz.afinal.FinalDb;
 public class DsmLibrary {
 
     private static final String TAG = "DsmLibrary";
-    private static final String tag = "这是1.0.3的包";
+    private static final String tag = "这是1.0.5的包";
     private static DsmLibrary dsmLibrary;
     public static final int DefaultDeviceUserCapacity = 150;//默认的设备用户容量
     public static final int DefaultDeviceFingerCapacity = 80;//默认的设备指纹容量
