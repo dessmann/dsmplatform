@@ -1,7 +1,7 @@
 apply plugin: 'com.android.library'
-//发布开源项目到Jcenter/Bintray/JitPack
+//发布开源项目到JitPack
 apply plugin: 'com.github.dcendents.android-maven'
-group='com.github.dccjll'
+group='com.github.dessmann'
 android {
     compileSdkVersion Integer.parseInt(compileSdkVersionG)
     buildToolsVersion buildToolsVersionG
@@ -9,8 +9,8 @@ android {
     defaultConfig {
         minSdkVersion Integer.parseInt(minSdkVersionG)
         targetSdkVersion Integer.parseInt(targetSdkVersionG)
-        versionCode 1
-        versionName "1.0.1"
+        versionCode 3
+        versionName "1.0.3"
     }
     buildTypes {
         release {
