@@ -8,24 +8,7 @@
 #---------------------------------4.反射相关的类和方法-----------------------
 
 #---------------------------------5.提供给外部的接口----------------------------------------
-#-keep class com.dsm.guardsdk.base.GuardSDKLibrary { *; }
-#-keep class com.dsm.guardsdk.base.OnOpenListener { *; }
-#-keep class com.dsm.guardsdk.base.DeviceGuard { *; }
-#-keep class com.dsm.guardsdk.common.dao.* { *; }
-#-keep class com.dsm.guardsdk.common.impl.CommonGuardDeviceImpl {
-#    public static com.dsm.guardsdk.common.dao.CommonGuardDevice getInstance();
-#}
-#-keep class com.dsm.guardsdk.common.impl.CommonGuardServerImpl {
-#    public static com.dsm.guardsdk.common.dao.CommonGuardServer getInstance();
-#}
-#
-#-keep class com.dsm.guardsdk.hainan.dao.* { *; }
-#-keep class com.dsm.guardsdk.hainan.impl.HainanGuardDeviceImpl {
-#    public static com.dsm.guardsdk.hainan.dao.HainanGuardDevice getInstance();
-#}
-#-keep class com.dsm.guardsdk.hainan.impl.HainanGuardServerImpl {
-#    public static com.dsm.guardsdk.hainan.dao.HainanGuardServer getInstance();
-#}
+-keep class com.dsm.platform { *; }
 
 #-------------------------------------------基本不用动区域--------------------------------------------
 #---------------------------------基本指令区----------------------------------
