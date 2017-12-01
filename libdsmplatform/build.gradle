@@ -15,27 +15,27 @@ android {
     buildTypes {
         debug {
             buildConfigField "boolean", "LOG_DEBUG", "true"
-            minifyEnabled true
+            minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
         release {
             buildConfigField "boolean", "LOG_DEBUG", "false"
-            minifyEnabled true
+            minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-    sourceSets {
-        main {
-            //res.srcDirs = ['res']
-            //java.srcDirs 'src'
-            //manifest.srcFile 'AndroidManifest.xml'
-            //aidl.srcDirs = ['src']
-            //renderscript.srcDirs = ['src']
-            assets.srcDirs = ['assets']
-            //jniLibs.srcDirs = ['libs']
-            //jniLibs.srcDirs = ['jni']
-        }
-    }
+//    sourceSets {
+//        main {
+//            //res.srcDirs = ['res']
+//            //java.srcDirs 'src'
+//            //manifest.srcFile 'AndroidManifest.xml'
+//            //aidl.srcDirs = ['src']
+//            //renderscript.srcDirs = ['src']
+//            assets.srcDirs = ['assets']
+//            //jniLibs.srcDirs = ['libs']
+//            //jniLibs.srcDirs = ['jni']
+//        }
+//    }
 }
 
 dependencies {
@@ -53,7 +53,7 @@ dependencies {
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     testCompile 'junit:junit:4.12'
     compile files('libs/commons-lang3-3.1.jar')
-    provided files('src/main/assets')
+//    provided files('src/main/assets')
 }
 
 //def SDK_BASENAME = "libdsmplatform";
