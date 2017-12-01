@@ -13,12 +13,6 @@ android {
         versionName "1.0.5"
     }
     buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
-    }
-    buildTypes {
         debug {
             buildConfigField "boolean", "LOG_DEBUG", "true"
             minifyEnabled false
@@ -59,22 +53,23 @@ dependencies {
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     testCompile 'junit:junit:4.12'
     compile files('libs/commons-lang3-3.1.jar')
+    provided files('src/main/assets')
 }
 
-def SDK_BASENAME = "libdsmplatform";
-def SDK_VERSION = "_V1.0";
-def sdkDestinationPath = "build";
-def zipFile = file('build/intermediates/bundles/release/classes.jar')
-
-task deleteBuild(type: Delete) {
-    delete sdkDestinationPath + SDK_BASENAME + SDK_VERSION + ".jar"
-}
-
-task makeJar(type: Jar) {
-    from zipTree(zipFile)
-    from fileTree(dir: 'src/main',includes: ['assets/**'])//将assets目录打入jar包
-    baseName = SDK_BASENAME + SDK_VERSION
-    destinationDir = file(sdkDestinationPath)
-}
-
-makeJar.dependsOn(deleteBuild, build)
+//def SDK_BASENAME = "libdsmplatform";
+//def SDK_VERSION = "_V1.0";
+//def sdkDestinationPath = "build";
+//def zipFile = file('build/intermediates/bundles/release/classes.jar')
+//
+//task deleteBuild(type: Delete) {
+//    delete sdkDestinationPath + SDK_BASENAME + SDK_VERSION + ".jar"
+//}
+//
+//task makeJar(type: Jar) {
+//    from zipTree(zipFile)
+//    from fileTree(dir: 'src/main',includes: ['assets/**'])//将assets目录打入jar包
+//    baseName = SDK_BASENAME + SDK_VERSION
+//    destinationDir = file(sdkDestinationPath)
+//}
+//
+//makeJar.dependsOn(deleteBuild, build)
