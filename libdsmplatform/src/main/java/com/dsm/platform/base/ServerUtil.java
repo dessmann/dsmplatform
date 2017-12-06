@@ -4,6 +4,7 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import com.dsm.platform.DsmLibrary;
+import com.dsm.platform.R;
 import com.dsm.platform.listener.OnServerUnitListener;
 import com.dsm.platform.util.SharedPreferencesUtil;
 import com.dsm.platform.util.log.LogUtil;
@@ -89,15 +90,15 @@ public class ServerUtil {
             return;
         }
         if (TextUtils.isEmpty(url) || !(url.startsWith("http://") || url.startsWith("https://"))) {
-            onServerUnitListener.failure("url验证失败", Log.ERROR);
+            onServerUnitListener.failure(DsmLibrary.application.getString(R.string.url_valide_failure), Log.ERROR);
             return;
         }
         if (TextUtils.isEmpty(fileKey)) {
-            onServerUnitListener.failure("文件键验证失败", Log.ERROR);
+            onServerUnitListener.failure(DsmLibrary.application.getString(R.string.file_attr_validate_failure), Log.ERROR);
             return;
         }
         if (file == null) {
-            onServerUnitListener.failure("文件校验失败", Log.ERROR);
+            onServerUnitListener.failure(DsmLibrary.application.getString(R.string.file_validate_failure), Log.ERROR);
             return;
         }
         NoHttpUtil.getInstance(DsmLibrary.application).uploadFile(url, postMap, fileKey, file, new NoHttpUtil.CommonResponseListener() {
@@ -120,11 +121,11 @@ public class ServerUtil {
             return;
         }
         if (TextUtils.isEmpty(url) || !(url.startsWith("http://") || url.startsWith("https://"))) {
-            listener.onFailure("url验证失败", Log.ERROR);
+            listener.onFailure(DsmLibrary.application.getString(R.string.url_valide_failure), Log.ERROR);
             return;
         }
         if (TextUtils.isEmpty(fileFolder) || TextUtils.isEmpty(filename)) {
-            listener.onFailure("文件在本地的存储路径或文件名验证失败", Log.ERROR);
+            listener.onFailure(DsmLibrary.application.getString(R.string.file_path_validate_failure), Log.ERROR);
             return;
         }
         NoHttpUtil.getInstance(DsmLibrary.application).download(url, fileFolder, filename, listener);
@@ -136,7 +137,7 @@ public class ServerUtil {
             return;
         }
         if (TextUtils.isEmpty(url) || !(url.startsWith("http://") || url.startsWith("https://"))) {
-            onServerUnitListener.failure("图片url验证失败", Log.ERROR);
+            onServerUnitListener.failure(DsmLibrary.application.getString(R.string.pic_url_validate_failure), Log.ERROR);
             return;
         }
         NoHttpUtil.getInstance(DsmLibrary.application).sendImageRequest(url, new NoHttpUtil.CommonResponseListener() {

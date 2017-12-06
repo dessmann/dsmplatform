@@ -15,4 +15,9 @@
     <string name="explain_read_contact_permission">从通讯录中读取联系人信息需要访问通讯录权限</string>
     <string name="read_contact_list_permission_deny">已禁止读取通讯录</string>
     <string name="download_failure_please_check_network">下载文件失败，请检查网络</string>
+    <string name="url_valide_failure">url验证失败</string>
+    <string name="file_attr_validate_failure">文件属性验证失败</string>
+    <string name="file_validate_failure">文件校验失败</string>
+    <string name="file_path_validate_failure">文件在本地的存储路径或文件名验证失败</string>
+    <string name="pic_url_validate_failure">图片url验证失败</string>
 </resources>
