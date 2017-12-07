@@ -1,5 +1,4 @@
 <resources>
-    <string name="app_name">lib_dsm_platform</string>
     <string name="server_error">server occur exception</string>
     <string name="system_error">system occur exception</string>
     <string name="network_error">network occur exception, please check!</string>

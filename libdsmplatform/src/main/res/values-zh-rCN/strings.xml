@@ -1,5 +1,4 @@
 <resources>
-    <string name="app_name">lib_dsm_platform</string>
     <string name="server_error">服务器异常</string>
     <string name="system_error">系统异常</string>
     <string name="network_error">网络连接异常，请检查网络</string>
