@@ -5,6 +5,7 @@ import android.view.Gravity;
 import android.widget.Toast;
 
 import com.dsm.platform.DsmLibrary;
+import com.dsm.platform.R;
 import com.dsm.platform.util.log.LogUtil;
 
 /**
@@ -21,7 +22,7 @@ public class ToastUtil {
      */
     public static void showToast(String text) {
         if (text == null || text.equals("")) {
-            text = "系统异常";
+            text = DsmLibrary.application.getString(R.string.system_error);
         }
         if (toast == null) {
             toast = Toast.makeText(DsmLibrary.application, text, Toast.LENGTH_SHORT);
@@ -37,7 +38,7 @@ public class ToastUtil {
 
     public static void showToast(String tag, String text, String log) {
         if (text == null || text.equals("")) {
-            text = "系统异常";
+            text = DsmLibrary.application.getString(R.string.system_error);
         }
         if (toast == null) {
             toast = Toast.makeText(DsmLibrary.application, text, Toast.LENGTH_SHORT);
@@ -57,7 +58,7 @@ public class ToastUtil {
 
     public static void showToastLong(String tag, String text) {
         if (text == null || text.equals("")) {
-            text = "系统异常";
+            text = DsmLibrary.application.getString(R.string.system_error);
         }
         if (toast == null) {
             toast = Toast.makeText(DsmLibrary.application, text, Toast.LENGTH_LONG);
@@ -82,7 +83,7 @@ public class ToastUtil {
      */
     public static void showToast(String text, int gravity) {
         if (text == null || text.equals("")) {
-            text = "系统异常";
+            text = DsmLibrary.application.getString(R.string.system_error);
         }
         if (toast == null) {
             toast = Toast.makeText(DsmLibrary.application, text, Toast.LENGTH_LONG);

@@ -9,6 +9,8 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.provider.MediaStore;
 
+import com.dsm.platform.R;
+
 /**
  * Created by yanfa on 2016/11/11.
  */
@@ -56,23 +58,23 @@ public class MusicUtil {
             try {
                 cursor = contentResolver.query(data.getData(), projection, null, null, null);
             } catch (Exception e) {
-                onResult(null, null, "请选择正确的音频文件");
+                onResult(null, null, context.getString(R.string.plese_select_well_voice_file));
                 return;
             }
             if (cursor == null) {
-                onResult(null, null, "音乐不存在");
+                onResult(null, null, context.getString(R.string.music_file_does_not_exist));
             } else {
                 if (cursor.moveToFirst()) {
                     String name = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.DISPLAY_NAME));
                     Uri uri = data.getData();
-                    onResult(name, uri, "本地音乐选择成功");
+                    onResult(name, uri, context.getString(R.string.local_music_selection_succeed));
                 } else {
-                    onResult(null, null, "音乐不存在");
+                    onResult(null, null, context.getString(R.string.music_file_does_not_exist));
                 }
                 cursor.close();
             }
         } else {
-            onResult(null, null, "取消本地音乐选择");
+            onResult(null, null, context.getString(R.string.cancel_local_music_selection));
         }
     }
 

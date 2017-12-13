@@ -20,6 +20,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 
+import com.dsm.platform.R;
 import com.dsm.platform.config.PhoneConfigManager;
 import com.dsm.platform.listener.OnPermissionResult;
 import com.dsm.platform.util.log.LogUtil;
@@ -89,14 +90,14 @@ public class PermisstionUtil {
      * 请求读写sd卡权限
      */
     public static void requestStoragePermisstion(@NonNull final Context context, final OnPermissionResult onPermissionResult) {
-        requestPermissions(context, STORAGE, STORAGE_CODE, "需要读写sd卡权限", onPermissionResult);
+        requestPermissions(context, STORAGE, STORAGE_CODE, context.getString(R.string.neet_sd_permission), onPermissionResult);
     }
 
     /**
      * 请求拍照权限
      */
     public static void requestCamaraPermission(@NonNull final Context context, final OnPermissionResult onPermissionResult) {
-        requestPermissions(context, CAMERA, CAMERA_CODE, "需要拍照权限", onPermissionResult);
+        requestPermissions(context, CAMERA, CAMERA_CODE, context.getString(R.string.neet_camera_permission), onPermissionResult);
     }
 
     /**
@@ -272,7 +273,7 @@ public class PermisstionUtil {
                     list.add(permission);
                 }
             } else {
-                throw new IllegalArgumentException("context 只能是Activity或Fragment");
+                throw new IllegalArgumentException("context error");
             }
         }
         return list.toArray(new String[list.size()]);
@@ -346,13 +347,13 @@ public class PermisstionUtil {
 //        },true);
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setMessage(onPermissionResult.explainMsg);
-        builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton(context.getString(R.string.confirm), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 invokeRequestPermissions(context, onPermissionResult);
             }
         });
-        builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton(context.getString(R.string.cancel), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 onPermissionResult.grantResults = getPermissionsResults(context, onPermissionResult.permissions);

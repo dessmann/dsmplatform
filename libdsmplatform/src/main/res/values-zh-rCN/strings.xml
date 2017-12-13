@@ -19,4 +19,16 @@
     <string name="file_validate_failure">文件校验失败</string>
     <string name="file_path_validate_failure">文件在本地的存储路径或文件名验证失败</string>
     <string name="pic_url_validate_failure">图片url验证失败</string>
+    <string name="id_card_can_not_empty">身份证号码不能为空</string>
+    <string name="id_card_format_error">身份证号码格式错误</string>
+    <string name="the_first_two_digits_errors_in_the_id_card_number">身份证号码前两位错误</string>
+    <string name="the_last_check_of_the_id_number_is_incorrect">身份证号码最后一位校验码不正确</string>
+    <string name="the_id_number_is_valid">身份证号码有效</string>
+    <string name="neet_sd_permission">需要读写sd卡权限</string>
+    <string name="neet_camera_permission">需要拍照权限</string>
+    <string name="confirm">确定</string>
+    <string name="plese_select_well_voice_file">请选择正确的音频文件</string>
+    <string name="music_file_does_not_exist">音乐不存在</string>
+    <string name="local_music_selection_succeed">本地音乐选择成功</string>
+    <string name="cancel_local_music_selection">取消本地音乐选择</string>
 </resources>
