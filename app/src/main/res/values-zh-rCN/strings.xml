@@ -1,4 +1,4 @@
 <resources>
     <string name="app_name">dsmplatform</string>
-    <string name="login">LOGIN</string>
+    <string name="login">登录</string>
 </resources>

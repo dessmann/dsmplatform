@@ -10,7 +10,12 @@ import com.dsm.platform.util.SharedPreferencesUtil;
 import com.dsm.platform.util.log.LogUtil;
 import com.dsm.platform.util.net.NoHttpUtil;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.File;
+import java.lang.reflect.Field;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,7 +30,7 @@ public class ServerUtil {
     private static final String TAG = "ServerUtil";
 
     public static void request(String url, Map<String, String> data, Class clazz, OnServerUnitListener onServerUnitListener) {
-        NoHttpUtil.getInstance(DsmLibrary.application).asyncPostStringNoEncryptRequest(url, buildHeader(), data, buildCommonResponseListener(clazz, onServerUnitListener));
+        NoHttpUtil.getInstance(DsmLibrary.application).asyncPostStringNoEncryptRequest(url, buildHeader(), data, buildCommonResponseListener(url, clazz, onServerUnitListener));
     }
 
     public static Map<String, String> buildStringData(String[] keys, String[] values) {
@@ -59,21 +64,12 @@ public class ServerUtil {
         return header;
     }
 
-    private static NoHttpUtil.CommonResponseListener buildCommonResponseListener(final Class clazz, final OnServerUnitListener onServerUnitListener) {
+    private static NoHttpUtil.CommonResponseListener buildCommonResponseListener(final String url, final Class clazz, final OnServerUnitListener onServerUnitListener) {
         return new NoHttpUtil.CommonResponseListener(clazz) {
 
             @Override
             public void requestSuccess(List data, String msg) {
-                try {
-                    if (clazz != null) {
-                        String token = clazz.getDeclaredMethod("getToken").invoke(data.get(0)).toString();
-                        if(!TextUtils.isEmpty(token)) {
-                            SharedPreferencesUtil.putString(DsmLibrary.application, "token", token);
-                        }
-                    }
-                } catch (Exception e) {
-//                    e.printStackTrace();
-                }
+                getToken(url, data, clazz);
                 onServerUnitListener.success(data, msg);
             }
 
@@ -82,6 +78,41 @@ public class ServerUtil {
                 onServerUnitListener.failure(error, loglever);
             }
         };
+    }
+
+    /**
+     * 登陆、注册、忘记密码等涉及到登陆的接口成功时获取token
+     *
+     * @param url
+     * @param data
+     * @param clazz
+     */
+    private static void getToken(String url, List data, Class clazz) {
+        try {
+            if (url.endsWith("/xiaodi/user/login.action")
+                    || url.endsWith("/xiaodi/user/register.action")
+                    || url.endsWith("/xiaodi/user/updateUserPassDirectly.action")) {
+                String token;
+                if (clazz != null) {
+                    Field field = clazz.getDeclaredField("token");
+                    field.setAccessible(true);
+                    token = field.get(data.get(0)).toString();
+                } else {
+                    try {
+                        JSONArray jsonArray = new JSONArray((String) data.get(0));
+                        token = jsonArray.getJSONObject(0).getString("token");
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                        JSONObject jsonObject = new JSONObject((String) data.get(0));
+                        token = jsonObject.getString("token");
+                    }
+                }
+                SharedPreferencesUtil.putString(DsmLibrary.application, "token", token);
+                LogUtil.i(TAG, "NoHttpUtil.token=" + token);
+            }
+        } catch (Exception e) {
+            LogUtil.e(TAG, "getToken:" + e.getMessage());
+        }
     }
 
     public static void uploadFile(String url, Map<String, String> postMap, String fileKey, File file, final OnServerUnitListener onServerUnitListener) {
@@ -156,9 +187,9 @@ public class ServerUtil {
 
     public static void doAjax(boolean encrypt, String url, Map<String, String> param, Class clazz, OnServerUnitListener onServerUnitListener) {
         if (encrypt) {
-            NoHttpUtil.getInstance(DsmLibrary.application).asyncPostStringEncryptRequest(url, buildHeader(), param, buildCommonResponseListener(clazz, onServerUnitListener));
+            NoHttpUtil.getInstance(DsmLibrary.application).asyncPostStringEncryptRequest(url, buildHeader(), param, buildCommonResponseListener(url, clazz, onServerUnitListener));
             return;
         }
-        NoHttpUtil.getInstance(DsmLibrary.application).asyncPostStringNoEncryptRequest(url, buildHeader(), param, buildCommonResponseListener(clazz, onServerUnitListener));
+        NoHttpUtil.getInstance(DsmLibrary.application).asyncPostStringNoEncryptRequest(url, buildHeader(), param, buildCommonResponseListener(url, clazz, onServerUnitListener));
     }
 }
