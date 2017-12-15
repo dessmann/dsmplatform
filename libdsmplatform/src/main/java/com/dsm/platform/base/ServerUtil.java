@@ -1,10 +1,8 @@
 package com.dsm.platform.base;
 
 import android.text.TextUtils;
-import android.util.Log;
 
 import com.dsm.platform.DsmLibrary;
-import com.dsm.platform.R;
 import com.dsm.platform.listener.OnServerUnitListener;
 import com.dsm.platform.util.SharedPreferencesUtil;
 import com.dsm.platform.util.log.LogUtil;
@@ -74,8 +72,8 @@ public class ServerUtil {
             }
 
             @Override
-            public void requestFailed(String error, int loglever) {
-                onServerUnitListener.failure(error, loglever);
+            public void requestFailed(Integer msgCode) {
+                onServerUnitListener.failure(msgCode);
             }
         };
     }
@@ -121,15 +119,15 @@ public class ServerUtil {
             return;
         }
         if (TextUtils.isEmpty(url) || !(url.startsWith("http://") || url.startsWith("https://"))) {
-            onServerUnitListener.failure(DsmLibrary.application.getString(R.string.url_valide_failure), Log.ERROR);
+            onServerUnitListener.failure(-60023);
             return;
         }
         if (TextUtils.isEmpty(fileKey)) {
-            onServerUnitListener.failure(DsmLibrary.application.getString(R.string.file_attr_validate_failure), Log.ERROR);
+            onServerUnitListener.failure(-60024);
             return;
         }
         if (file == null) {
-            onServerUnitListener.failure(DsmLibrary.application.getString(R.string.file_validate_failure), Log.ERROR);
+            onServerUnitListener.failure(-60025);
             return;
         }
         NoHttpUtil.getInstance(DsmLibrary.application).uploadFile(url, postMap, fileKey, file, new NoHttpUtil.CommonResponseListener() {
@@ -140,8 +138,8 @@ public class ServerUtil {
             }
 
             @Override
-            public void requestFailed(String error, int loglever) {
-                onServerUnitListener.failure(error, loglever);
+            public void requestFailed(Integer msgCode) {
+                onServerUnitListener.failure(msgCode);
             }
         });
     }
@@ -152,11 +150,11 @@ public class ServerUtil {
             return;
         }
         if (TextUtils.isEmpty(url) || !(url.startsWith("http://") || url.startsWith("https://"))) {
-            listener.onFailure(DsmLibrary.application.getString(R.string.url_valide_failure), Log.ERROR);
+            listener.onFailure(-60023);
             return;
         }
         if (TextUtils.isEmpty(fileFolder) || TextUtils.isEmpty(filename)) {
-            listener.onFailure(DsmLibrary.application.getString(R.string.file_path_validate_failure), Log.ERROR);
+            listener.onFailure(-60026);
             return;
         }
         NoHttpUtil.getInstance(DsmLibrary.application).download(url, fileFolder, filename, listener);
@@ -168,7 +166,7 @@ public class ServerUtil {
             return;
         }
         if (TextUtils.isEmpty(url) || !(url.startsWith("http://") || url.startsWith("https://"))) {
-            onServerUnitListener.failure(DsmLibrary.application.getString(R.string.pic_url_validate_failure), Log.ERROR);
+            onServerUnitListener.failure(-60027);
             return;
         }
         NoHttpUtil.getInstance(DsmLibrary.application).sendImageRequest(url, new NoHttpUtil.CommonResponseListener() {
@@ -179,8 +177,8 @@ public class ServerUtil {
             }
 
             @Override
-            public void requestFailed(String error, int loglever) {
-                onServerUnitListener.failure(error, loglever);
+            public void requestFailed(Integer msgCode) {
+                onServerUnitListener.failure(msgCode);
             }
         });
     }

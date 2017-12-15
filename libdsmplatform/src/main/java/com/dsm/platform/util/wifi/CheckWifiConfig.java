@@ -13,10 +13,8 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.SystemClock;
 import android.text.TextUtils;
-import android.util.Log;
 
-import com.dsm.platform.DsmLibrary;
-import com.dsm.platform.R;
+import com.dsm.platform.base.BaseMsgCode;
 import com.dsm.platform.listener.OnCheckWifiConfigListener;
 import com.dsm.platform.util.SystemUtil;
 import com.dsm.platform.util.log.LogUtil;
@@ -49,7 +47,7 @@ public class CheckWifiConfig {
                     wifiUtils.connectWifi(originNetworkId);
                 }
                 if (onCheckWifiConfigListener != null) {
-                    onCheckWifiConfigListener.onConnectWifiFailure(DsmLibrary.application.getString(R.string.check_wifi_config_timeout), Log.INFO);
+                    onCheckWifiConfigListener.onConnectWifiFailure(-60020);
                 }
             }
         }
@@ -80,7 +78,7 @@ public class CheckWifiConfig {
                             return;
                         }
                         wifiCheckTimeoutHandler.removeCallbacks(wifiCheckTimeoutRunnable);
-                        onCheckWifiConfigListener.onConnectWifiFailure(DsmLibrary.application.getString(R.string.wifi_pwd_check_error), Log.INFO);
+                        onCheckWifiConfigListener.onConnectWifiFailure(-60016);
                     }
                 }
             } else if (intent.getAction().equalsIgnoreCase(WifiManager.NETWORK_STATE_CHANGED_ACTION)) {
@@ -160,11 +158,11 @@ public class CheckWifiConfig {
      * 执行验证wifi密码的操作
      */
     public void walk() {
-        String result = checkParams();
-        if (!TextUtils.isEmpty(result)) {
-            LogUtil.e(TAG, result);
+        Integer result = checkParams();
+        if (result != null) {
+            LogUtil.e(TAG, BaseMsgCode.parseBLECodeMessage(result));
             if (onCheckWifiConfigListener != null) {
-                onCheckWifiConfigListener.onAddWifiConfigFailure(result, Log.INFO);
+                onCheckWifiConfigListener.onConnectWifiFailure(result);
             }
             return;
         }
@@ -174,16 +172,16 @@ public class CheckWifiConfig {
     /**
      * 验证参数
      */
-    private String checkParams() {
+    private Integer checkParams() {
         LogUtil.i(TAG, "ssid=" + ssid + ",pwd=" + password);
         if (context == null) {
-            return DsmLibrary.application.getString(R.string.please_check_context_param);
+            return -60013;
         }
         if (TextUtils.isEmpty(ssid) || ssid.length() > 33) {
-            return DsmLibrary.application.getString(R.string.please_check_wifi_ssid);
+            return -60018;
         }
         if (!TextUtils.isEmpty(password) && (password.length() < 8 || password.length() > 65)) {
-            return DsmLibrary.application.getString(R.string.please_check_wifi_pwd);
+            return -60017;
         }
         return null;
     }
@@ -221,7 +219,7 @@ public class CheckWifiConfig {
                         if (!contains) {
                             LogUtil.e(TAG, "wifi列表没有当前ssid的wifi");
                             if (onCheckWifiConfigListener != null) {
-                                onCheckWifiConfigListener.onNotFoundWifi(DsmLibrary.application.getString(R.string.not_found_wifi), Log.INFO);
+                                onCheckWifiConfigListener.onConnectWifiFailure(-60014);
                             }
                             return;
                         }
@@ -229,7 +227,7 @@ public class CheckWifiConfig {
                         if (newNetworkId == -1) {
                             LogUtil.e(TAG, "添加wifi配置失败");
                             if (onCheckWifiConfigListener != null) {
-                                onCheckWifiConfigListener.onAddWifiConfigFailure(DsmLibrary.application.getString(R.string.add_wifi_config_failure), Log.INFO);
+                                onCheckWifiConfigListener.onConnectWifiFailure(-60019);
                             }
                             return;
                         }
@@ -246,7 +244,7 @@ public class CheckWifiConfig {
                                     return;
                                 }
                                 wifiCheckTimeoutHandler.removeCallbacks(wifiCheckTimeoutRunnable);
-                                onCheckWifiConfigListener.onConnectWifiFailure(DsmLibrary.application.getString(R.string.connect_wifi_failure), Log.INFO);
+                                onCheckWifiConfigListener.onConnectWifiFailure(-60015);
                             }
                         }
                     }

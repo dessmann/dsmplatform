@@ -8,5 +8,5 @@ import java.util.List;
 
 public interface OnServerUnitListener {
     void success(List data, String msg);
-    void failure(String error, int loglevel);
+    void failure(Integer msgCode);
 }

@@ -2,8 +2,7 @@ package com.dsm.platform.util;
 
 import android.text.TextUtils;
 
-import com.dsm.platform.DsmLibrary;
-import com.dsm.platform.R;
+import com.dsm.platform.base.BaseMsgCode;
 import com.dsm.platform.util.log.LogUtil;
 
 import org.json.JSONException;
@@ -190,11 +189,11 @@ public class RegexUtil {
         String regex_18 = "^\\d{6}(18|19|20)\\d{2}(0[1-9]|1[012])(0[1-9]|[12]\\d|3[01])\\d{3}(\\d|X)$";
 
         if (TextUtils.isEmpty(cardId)) {
-            return new CheckResult(false, DsmLibrary.application.getString(R.string.id_card_can_not_empty));
+            return new CheckResult(false, BaseMsgCode.parseBLECodeMessage(-60028));
         }
 
         if (!cardId.matches(regex_15) && !cardId.matches(regex_18)) {
-            return new CheckResult(false, DsmLibrary.application.getString(R.string.id_card_format_error));
+            return new CheckResult(false, BaseMsgCode.parseBLECodeMessage(-60029));
         }
 
         String place = "";
@@ -206,7 +205,7 @@ public class RegexUtil {
         }
 
         if (TextUtils.isEmpty(place)) {
-            return new CheckResult(false, DsmLibrary.application.getString(R.string.the_first_two_digits_errors_in_the_id_card_number));
+            return new CheckResult(false, BaseMsgCode.parseBLECodeMessage(-60030));
         }
 
         if (cardId.length() == 18) {
@@ -220,11 +219,11 @@ public class RegexUtil {
             }
 
             if (parity[sum % 11] != (singleCodes[17] - 48)) {
-                return new CheckResult(false, DsmLibrary.application.getString(R.string.the_last_check_of_the_id_number_is_incorrect));
+                return new CheckResult(false, BaseMsgCode.parseBLECodeMessage(-60031));
             }
         }
 
-        return new CheckResult(true, DsmLibrary.application.getString(R.string.the_id_number_is_valid));
+        return new CheckResult(true, BaseMsgCode.parseBLECodeMessage(60001));
     }
 
     // 隐藏手机号码前7位

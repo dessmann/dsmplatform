@@ -13,23 +13,13 @@ public abstract class OnCommonResponseListener {
     /**
      * 结束请求
      */
-    public void finish(String tag, final boolean status, final Object data, final String msg, final int loglevel){
-        LogUtil.i(TAG, "finish\ntag=" + tag + "\nstatus=" + status + "\ndata=" + data + "\nmsg=" + msg + "\nloglevel=" + LogUtil.getLogTag(loglevel));
+    public void finish(String tag, final boolean status, final Object data, final int msgCode){
+        LogUtil.i(TAG, "finish\ntag=" + tag + "\nstatus=" + status + "\ndata=" + data + "\nmsgCode=" + msgCode);
         if(status){
             onSuccess(data);
         }else{
-            onFailure(msg, loglevel);
+            onFailure(msgCode);
         }
-//        new Handler(Looper.getMainLooper()).post(new Runnable() {
-//            @Override
-//            public void run() {
-//                if(status){
-//                    onSuccess(data);
-//                }else{
-//                    onFailure(msg, loglevel);
-//                }
-//            }
-//        });
     }
 
     /**
@@ -40,5 +30,5 @@ public abstract class OnCommonResponseListener {
     /**
      * 请求失败
      */
-    public abstract void onFailure(String error, int loglevel);
+    public abstract void onFailure(int msgCode);
 }

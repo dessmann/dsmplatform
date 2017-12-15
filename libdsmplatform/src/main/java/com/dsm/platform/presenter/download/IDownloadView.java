@@ -10,5 +10,5 @@ public interface IDownloadView {
     String getLocalStorageFilePath();//下载的文件在本地的存储路径
     String getLocalStorageFileName();//下载的文件在本地的存储名称
     void onDownloadSuccess(String wholePathWithFileName);//下载成功，返回下载的文件在本地的完整存储路径
-    void onDownloadFailure(String usefulErrorMsg);//下载失败
+    void onDownloadFailure(Integer msgCode);//下载失败
 }

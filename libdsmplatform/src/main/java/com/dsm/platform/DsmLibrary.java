@@ -3,6 +3,7 @@ package com.dsm.platform;
 import android.app.Application;
 import android.text.TextUtils;
 
+import com.dsm.platform.base.BaseMsgCode;
 import com.dsm.platform.base.User;
 import com.dsm.platform.util.log.LogUtil;
 import com.umeng.analytics.MobclickAgent;
@@ -53,6 +54,7 @@ public class DsmLibrary {
             this.finalDb = finalDb;
             //接收应用程序上下文参数
             DsmLibrary.application = application;
+            new BaseMsgCode();
             //初始化网络请求框架
             NoHttp.initialize(application);
             //UMeng统计

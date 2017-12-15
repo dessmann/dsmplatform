@@ -2,7 +2,6 @@ package com.dsm.platform.presenter.loadcontactlist;
 
 import android.app.Activity;
 import android.content.Context;
-import android.util.Log;
 
 import com.dsm.platform.R;
 import com.dsm.platform.listener.OnPermissionResult;
@@ -47,7 +46,7 @@ public class ILoadPhoneContactListImpl implements ILoadPhoneContactList {
 
                     @Override
                     public void denied(int requestCode) {
-                        iLoadPhoneContactListView.loadContactListFailure(context.getString(R.string.read_contact_list_permission_deny), Log.INFO);
+                        iLoadPhoneContactListView.loadContactListFailure(-60021);
                     }
                 }
         );
@@ -64,7 +63,7 @@ public class ILoadPhoneContactListImpl implements ILoadPhoneContactList {
                             Collections.sort(phoneContactList, new PhoneContact());
                         } catch (Exception e) {
                             e.printStackTrace();
-                            iLoadPhoneContactListView.loadContactListFailure(e.getMessage(), Log.ERROR);
+                            iLoadPhoneContactListView.loadContactListFailure(-60034);
                             return;
                         }
                         ((Activity)context).runOnUiThread(

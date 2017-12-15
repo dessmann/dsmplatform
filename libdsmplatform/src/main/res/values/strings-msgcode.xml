@@ -1,0 +1,43 @@
+<resources>
+    <string-array name="baseMsgCode">
+        <item>60000#Photo download success|INFO</item>
+        <item>60001#The id number is valid|INFO</item>
+        <item>60002#Local music selection succeeds|INFO</item>
+        <item>60003#Cancel local music selection|INFO</item>
+        <item>-60000#Server exception|INFO</item>
+        <item>-60001#system error|INFO</item>
+        <item>-60002#Network connection exception, please check the network#INFO</item>
+        <item>-60003#The network is poor|ERROR</item>
+        <item>-60004#Request timed out|ERROR</item>
+        <item>-60005#Server not found|ERROR</item>
+        <item>-60006#URL is error|ERROR</item>
+        <item>-60007#Failed to find the cache|ERROR</item>
+        <item>-60008#Network protocol error|ERROR</item>
+        <item>-60008#Unknown network exception|ERROR</item>
+        <item>-60009#The server returns more than 400 error codes|ERROR</item>
+        <item>-60010#The returned data format is abnormal|ERROR</item>
+        <item>-60011#Photo download failed|ERROR</item>
+        <item>-60012#Failed to upload file|ERROR</item>
+        <item>-60013#Please check the context parameters|ERROR</item>
+        <item>-60014#No found for the specified wifi|INFO</item>
+        <item>-60015#Failed to connect wifi|INFO</item>
+        <item>-60016#Wifi password is incorret|INFO</item>
+        <item>-60017#Please check the wifi password|ERROR</item>
+        <item>-60018#Please check the wifi ssid|ERROR</item>
+        <item>-60019#Failed to add wifi configuration|ERROR</item>
+        <item>-60020#Detect wifi configuration timeout|ERROR</item>
+        <item>-60021#Reading the address book has been banned|ERROR</item>
+        <item>-60022#Failed to download the file, please check the network|INFO</item>
+        <item>-60023#Failed to validate the url|ERROR</item>
+        <item>-60024#File attribute validation failed|ERROR</item>
+        <item>-60025#File check failure|ERROR</item>
+        <item>-60026#The file failed in the local storage path or file name validation|ERROR</item>
+        <item>-60027#Image url validation failed|ERROR</item>
+        <item>-60028#The id card number cannot be empty|ERROR</item>
+        <item>-60029#Wrong id number format|INFO</item>
+        <item>-60030#The first two errors in the id card number|INFO</item>
+        <item>-60031#The last check of the id number is incorrect|INFO</item>
+        <item>-60032#Please select the correct audio file|INFO</item>
+        <item>-60033#Music doesn\'t exist|INFO</item>
+    </string-array>
+</resources>

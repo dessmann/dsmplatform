@@ -7,9 +7,8 @@ import android.net.NetworkInfo;
 import android.os.Handler;
 import android.os.Looper;
 import android.text.TextUtils;
-import android.util.Log;
 
-import com.dsm.platform.R;
+import com.dsm.platform.base.BaseMsgCode;
 import com.dsm.platform.util.SystemUtil;
 import com.dsm.platform.util.log.LogUtil;
 import com.yolanda.nohttp.FileBinary;
@@ -136,7 +135,7 @@ public class NoHttpUtil {
      */
     public void sendImageRequest(String url, final CommonResponseListener listener) {
         if (!SystemUtil.checkNetworkAvailable(context)) {
-            listener.onFinish(false, null, Log.INFO, context.getString(R.string.network_error));
+            listener.onFinish(false, null, -60002);
             return;
         }
         Request<Bitmap> request = NoHttp.createImageRequest(url, RequestMethod.GET);
@@ -158,13 +157,13 @@ public class NoHttpUtil {
             public void onSucceed(int what, Response<Bitmap> response) {
                 List data = new ArrayList();
                 data.add(response.get());
-                listener.onFinish(true, data, Log.INFO, "success");
+                listener.onFinish(true, data, 60000);
             }
 
             @Override
             public void onFailed(int what, Response<Bitmap> response) {
                 LogUtil.e(TAG, "url=" + response.request().url() + "\nerror=" + response.get());
-                listener.onFinish(false, null, Log.WARN, context.getString(R.string.network_error));
+                listener.onFinish(false, null, -60011);
             }
 
             @Override
@@ -179,7 +178,7 @@ public class NoHttpUtil {
      */
     public void uploadFile(final String url, Map<String, String> postMap, String fileKey, File postFile, final CommonResponseListener listener) {
         if (!SystemUtil.checkNetworkAvailable(context)) {
-            listener.onFinish(false, null, Log.INFO, context.getString(R.string.network_error));
+            listener.onFinish(false, null,-60002);
             return;
         }
         Request<String> request = NoHttp.createStringRequest(url, RequestMethod.POST);
@@ -199,15 +198,25 @@ public class NoHttpUtil {
                 List data = new ArrayList();
                 try {
                     JSONObject jsonObject = new JSONObject(response.get());
+                    String msg = jsonObject.getString("msg");
+                    Integer msgCode = 0;
+                    try {
+                        msgCode = jsonObject.getInt("errorCode");
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    if (msgCode != 0) {
+                        BaseMsgCode.codeMap.put(msgCode, msg);
+                    }
                     if (jsonObject.getInt("status") == 1) {
-                        listener.onFinish(true, data, Log.INFO, jsonObject.getString("msg"));
+                        listener.onFinish(true, data, msgCode);
                     } else {
                         LogUtil.e(TAG, "url=" + response.request().url() + "\n协议状态验证失败");
-                        listener.onFinish(false, null, Log.WARN, jsonObject.getString("msg"));
+                        listener.onFinish(false, null, msgCode);
                     }
                 } catch (JSONException e) {
                     LogUtil.e(TAG, "url=" + response.request().url() + "\nerror=" + e.getMessage());
-                    listener.onFinish(false, null, Log.WARN, context.getString(R.string.network_error));
+                    listener.onFinish(false, null, -60012);
                 }
 
             }
@@ -215,7 +224,7 @@ public class NoHttpUtil {
             @Override
             public void onFailed(int what, Response<String> response) {
                 LogUtil.e(TAG, "url=" + response.request().url() + "\nerror=" + response.get());
-                listener.onFinish(false, null, Log.WARN, context.getString(R.string.network_error));
+                listener.onFinish(false, null,-60002);
             }
 
             @Override
@@ -232,7 +241,7 @@ public class NoHttpUtil {
      */
     public void download(String url, String fileFolder, String filename, final DownloadResponseListener listener) {
         if (!SystemUtil.checkNetworkAvailable(context)) {
-            listener.onFailure(context.getString(R.string.network_error), Log.INFO);
+            listener.onFailure(-60002);
             return;
         }
         DownloadRequest request = NoHttp.createDownloadRequest(url, RequestMethod.GET, fileFolder, filename, true, true);
@@ -245,7 +254,7 @@ public class NoHttpUtil {
                 new Handler(Looper.getMainLooper()).post(new Runnable() {
                     @Override
                     public void run() {
-                        listener.onFailure(exception.getMessage(), Log.ERROR);
+                        listener.onFailure(-60022);
                     }
                 });
             }
@@ -288,7 +297,7 @@ public class NoHttpUtil {
 
         void onSuccess(String filePath);
 
-        void onFailure(String msg, int loglever);
+        void onFailure(Integer msgCode);
     }
 
     /**
@@ -310,7 +319,7 @@ public class NoHttpUtil {
      */
     private void asyncPostStringRequest(String url, int what,Map<String, String> header, Map<String, String> map, CommonResponseListener listener, boolean encryptFlag) {
         if (!SystemUtil.checkNetworkAvailable(context)) {
-            listener.onFinish(false, null, Log.INFO, context.getString(R.string.network_error));
+            listener.onFinish(false, null,-60002);
             return;
         }
         // 取消队列中已开始的请求
@@ -378,7 +387,7 @@ public class NoHttpUtil {
             int responseCode = response.getHeaders().getResponseCode();
             if (responseCode > 400) {
                 LogUtil.e(TAG, "responseCode > 400\nresponseCode=" + responseCode + "\nurl=" + response.request().url());
-                onFinish(false, null, Log.WARN, context.getString(R.string.network_error));
+                onFinish(false, null,-60009);
                 return;
             }
             String resultString;
@@ -397,18 +406,29 @@ public class NoHttpUtil {
                 int status = jsonResult.getInt("status");
                 String data = jsonResult.getString("data");
                 String msg = jsonResult.getString("msg");
-                LogUtil.i(TAG, "status=" + status + "\ndata=" + data + "\nmsg=" + msg);
+                Integer msgCode = 0;
+                try {
+                    msgCode = jsonResult.getInt("errorCode");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    msgCode = -99999;
+                    msg = "这是一条模拟服务器的消息，看到此消息，表示服务器赞不支持消息码|INFO";
+                }
+                if (msgCode != 0) {
+                    BaseMsgCode.codeMap.put(msgCode, msg);
+                }
+                LogUtil.i(TAG, "status=" + status + "\ndata=" + data + "\nmsg=" + msg + "\nmsgCode=" + msgCode);
                 if (status != HTTP_REQUEST_SUCCESS) {
                     LogUtil.i(TAG, "status=" + status + "\nurl=" + response.request().url());
-                    onFinish(false, null, (-1 == status ? Log.INFO : Log.WARN), msg);
+                    onFinish(false, null, msgCode);
                     return;
                 }
                 List list = BeanUtil.antiSerializationJsonString(data, clazz);
-                onFinish(true, list, Log.INFO, msg);
+                onFinish(true, list, msgCode);
             } catch (JSONException e) {
                 e.printStackTrace();
                 LogUtil.e(TAG, "url=" + response.request().url() + " ,error=" + e.getMessage());
-                onFinish(false, null, Log.WARN, context.getString(R.string.network_error));
+                onFinish(false, null, -60010);
             }
         }
 
@@ -417,30 +437,38 @@ public class NoHttpUtil {
             Exception exception = response.getException();
             exception.printStackTrace();
             String errorMsg;
+            int msgCode = -60002;
             if (exception instanceof NetworkError) {// 网络不好
-                errorMsg = context.getString(R.string.network_error);
+                errorMsg = BaseMsgCode.parseBLECodeMessage(-60003);
+                msgCode = -60003;
                 LogUtil.e(TAG, "nohttp_network_error");
             } else if (exception instanceof TimeoutError) {// 请求超时
-                errorMsg = context.getString(R.string.network_error);
+                errorMsg = BaseMsgCode.parseBLECodeMessage(-60004);
+                msgCode = -60004;
                 LogUtil.e(TAG, "nohttp_timeout_error");
             } else if (exception instanceof UnKnownHostError) {// 找不到服务器
-                errorMsg = context.getString(R.string.network_error);
+                errorMsg = BaseMsgCode.parseBLECodeMessage(-60005);
+                msgCode = -60005;
                 LogUtil.e(TAG, "nohttp_unknownhost_error");
             } else if (exception instanceof URLError) {// URL是错的
-                errorMsg = context.getString(R.string.network_error);
+                errorMsg = BaseMsgCode.parseBLECodeMessage(-60006);
+                msgCode = -60006;
                 LogUtil.e(TAG, "nohttp_url_error");
             } else if (exception instanceof NotFoundCacheError) {
                 // 这个异常只会在仅仅查找缓存时没有找到缓存时返回
-                errorMsg = context.getString(R.string.network_error);
+                errorMsg = BaseMsgCode.parseBLECodeMessage(-60007);
+                msgCode = -60007;
                 LogUtil.e(TAG, "nohttp_notfoundcache_error");
             } else if (exception instanceof ProtocolException) {
-                errorMsg = context.getString(R.string.network_error);
+                errorMsg = BaseMsgCode.parseBLECodeMessage(-60008);//协议错误
+                msgCode = -60008;
                 LogUtil.e(TAG, "nohttp_protocol_error");
             } else {
-                errorMsg = context.getString(R.string.network_error);
+                errorMsg = BaseMsgCode.parseBLECodeMessage(-60009);
+                msgCode = -60009;
                 LogUtil.e(TAG, "nohttp_unknown_error");
             }
-            onFinish(false, null, Log.WARN, errorMsg);
+            onFinish(false, null, msgCode);
         }
 
         @Override
@@ -453,14 +481,14 @@ public class NoHttpUtil {
             recoverWhatValue(what);
         }
 
-        private void onFinish(final boolean state, final Object data, final int loglevel, final String msg) {
+        private void onFinish(final boolean state, final Object data, final Integer msgCode) {
             new Handler(Looper.getMainLooper()).post(new Runnable() {
                 @Override
                 public void run() {
                     if (state) {
-                        requestSuccess((List) data, msg);
+                        requestSuccess((List) data, BaseMsgCode.parseBLECodeMessage(msgCode));
                     } else {
-                        requestFailed(msg, loglevel);
+                        requestFailed(msgCode);
                     }
                 }
             });
@@ -468,7 +496,7 @@ public class NoHttpUtil {
 
         public abstract void requestSuccess(List data, String msg);
 
-        public abstract void requestFailed(String error, int loglever);
+        public abstract void requestFailed(Integer msgCode);
     }
 
     public static boolean checkNetworkAvailable(Context context) {

@@ -6,5 +6,5 @@ package com.dsm.platform.listener;
 
 public interface OnLibraryLoadListener {
     void loadSuccess(Object data);
-    void loadFailure(String msg);
+    void loadFailure(Integer msgCode);
 }

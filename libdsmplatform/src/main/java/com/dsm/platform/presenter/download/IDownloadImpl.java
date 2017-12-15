@@ -1,9 +1,7 @@
 package com.dsm.platform.presenter.download;
 
 import android.content.Context;
-import android.util.Log;
 
-import com.dsm.platform.R;
 import com.dsm.platform.base.ServerUtil;
 import com.dsm.platform.util.log.LogUtil;
 import com.dsm.platform.util.net.NoHttpUtil;
@@ -55,8 +53,8 @@ public class IDownloadImpl implements IDownload {
                     }
 
                     @Override
-                    public void onFailure(final String msg, final int loglever) {
-                        iDownloadView.onDownloadFailure(loglever == Log.WARN ? msg : context.getString(R.string.download_failure_please_check_network));
+                    public void onFailure(Integer msgCode) {
+                        iDownloadView.onDownloadFailure(msgCode);
                     }
                 }
         );

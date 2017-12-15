@@ -10,6 +10,7 @@ import android.net.Uri;
 import android.provider.MediaStore;
 
 import com.dsm.platform.R;
+import com.dsm.platform.base.BaseMsgCode;
 
 /**
  * Created by yanfa on 2016/11/11.
@@ -58,23 +59,23 @@ public class MusicUtil {
             try {
                 cursor = contentResolver.query(data.getData(), projection, null, null, null);
             } catch (Exception e) {
-                onResult(null, null, context.getString(R.string.plese_select_well_voice_file));
+                onResult(null, null, BaseMsgCode.parseBLECodeMessage(-60032));
                 return;
             }
             if (cursor == null) {
-                onResult(null, null, context.getString(R.string.music_file_does_not_exist));
+                onResult(null, null, BaseMsgCode.parseBLECodeMessage(-60033));
             } else {
                 if (cursor.moveToFirst()) {
                     String name = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.DISPLAY_NAME));
                     Uri uri = data.getData();
-                    onResult(name, uri, context.getString(R.string.local_music_selection_succeed));
+                    onResult(name, uri, BaseMsgCode.parseBLECodeMessage(60002));
                 } else {
-                    onResult(null, null, context.getString(R.string.music_file_does_not_exist));
+                    onResult(null, null, BaseMsgCode.parseBLECodeMessage(-60033));
                 }
                 cursor.close();
             }
         } else {
-            onResult(null, null, context.getString(R.string.cancel_local_music_selection));
+            onResult(null, null, BaseMsgCode.parseBLECodeMessage(60003));
         }
     }
 

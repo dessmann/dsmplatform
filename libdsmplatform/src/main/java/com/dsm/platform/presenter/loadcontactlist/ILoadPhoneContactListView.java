@@ -12,5 +12,5 @@ import java.util.List;
 
 public interface ILoadPhoneContactListView {
     void loadContactListSuccess(List<PhoneContact> phoneContactList);
-    void loadContactListFailure(String error, int loglevel);
+    void loadContactListFailure(Integer msgCode);
 }

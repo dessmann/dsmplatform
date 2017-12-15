@@ -5,8 +5,6 @@ package com.dsm.platform.listener;
  */
 
 public interface OnCheckWifiConfigListener {
-    void onNotFoundWifi(String error, int loglevel);
-    void onAddWifiConfigFailure(String error, int loglevel);
-    void onConnectWifiFailure(String error, int loglevel);
+    void onConnectWifiFailure(int msgCode);
     void onConnectWifiSuccess(String nid, String ssid);
 }

@@ -22,9 +22,6 @@ import javax.net.ssl.TrustManager;
 import javax.net.ssl.TrustManagerFactory;
 import javax.net.ssl.X509TrustManager;
 
-/**
- * Created by yanfa on 2016/6/22.
- */
 public class SSLContextUtil {
     private static SSLContext sslContext = null;
 

@@ -1,0 +1,44 @@
+<resources>
+    <string-array name="baseMsgCode">
+        <item>60000#图片下载成功|INFO</item>
+        <item>60001#身份证号码有效|INFO</item>
+        <item>60002#本地音乐选择成功|INFO</item>
+        <item>60003#取消本地音乐选择|INFO</item>
+        <item>-60000#服务器异常|INFO</item>
+        <item>-60001#系统异常|INFO</item>
+        <item>-60002#网络连接异常，请检查网络#INFO</item>
+        <item>-60003#网络不好|ERROR</item>
+        <item>-60004#请求超时|ERROR</item>
+        <item>-60005#找不到服务器|ERROR</item>
+        <item>-60006#URL是错的|ERROR</item>
+        <item>-60007#没有找到缓存|ERROR</item>
+        <item>-60008#网络协议错误|ERROR</item>
+        <item>-60008#未知的网络异常|ERROR</item>
+        <item>-60009#服务器返回400以上错误码|ERROR</item>
+        <item>-60010#返回的数据格式异常|ERROR</item>
+        <item>-60011#图片下载失败|ERROR</item>
+        <item>-60012#上传文件失败|ERROR</item>
+        <item>-60013#请检查上下文参数|ERROR</item>
+        <item>-60014#没有扫描到指定的wifi|INFO</item>
+        <item>-60015#wifi连接失败|INFO</item>
+        <item>-60016#wifi密码错误|INFO</item>
+        <item>-60017#请检查wifi密码|ERROR</item>
+        <item>-60018#请检查wifi wifiSSID|ERROR</item>
+        <item>-60019#添加wifi配置失败|ERROR</item>
+        <item>-60020#检测wifi配置超时|ERROR</item>
+        <item>-60021#已禁止读取通讯录|ERROR</item>
+        <item>-60022#下载文件失败，请检查网络|INFO</item>
+        <item>-60023#url验证失败|ERROR</item>
+        <item>-60024#文件属性验证失败|ERROR</item>
+        <item>-60025#文件校验失败|ERROR</item>
+        <item>-60026#文件在本地的存储路径或文件名验证失败|ERROR</item>
+        <item>-60027#图片url验证失败|ERROR</item>
+        <item>-60028#身份证号码不能为空|ERROR</item>
+        <item>-60029#身份证号码格式错误|INFO</item>
+        <item>-60030#身份证号码前两位错误|INFO</item>
+        <item>-60031#身份证号码最后一位校验码不正确|INFO</item>
+        <item>-60032#请选择正确的音频文件|INFO</item>
+        <item>-60033#音乐不存在|INFO</item>
+        <item>-60034#加载通讯录数据异常|ERROR</item>
+    </string-array>
+</resources>

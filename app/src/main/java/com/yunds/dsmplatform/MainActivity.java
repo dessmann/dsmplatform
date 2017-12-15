@@ -7,12 +7,13 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
 import android.view.View;
-import android.widget.TextView;
 
 import com.dsm.platform.DsmLibrary;
+import com.dsm.platform.base.BaseMsgCode;
 import com.dsm.platform.base.ServerUtil;
 import com.dsm.platform.listener.OnServerUnitListener;
 import com.dsm.platform.util.ToastUtil;
+import com.dsm.platform.util.log.LogUtil;
 
 import java.util.HashMap;
 import java.util.List;
@@ -31,6 +32,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
         String logFileName = "log.txt";
         String releaseLogPath = getFilesDir() + "data/" + getPackageName() + "/cache/Log/";
         DsmLibrary.getInstance().init(getApplication(), null, true, false, logPath, logFileName, releaseLogPath);
+        LogUtil.e(TAG, "onCreate,codeMap=" + BaseMsgCode.codeMap);
         findViewById(R.id.loginBtn).setOnClickListener(this);
         progressDialog = new ProgressDialog(this);
     }
@@ -49,14 +51,16 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 @Override
                 public void success(List data, String msg) {
                     progressDialog.dismiss();
+                    LogUtil.e(TAG, "success,codeMap=" + BaseMsgCode.codeMap);
                     Log.i(TAG, "登录成功\ndata=" +data + "\nmsg=" + msg);
                     ToastUtil.showToast("登录成功");
                 }
 
                 @Override
-                public void failure(String error, int loglevel) {
+                public void failure(Integer msgCode) {
                     progressDialog.dismiss();
-                    Log.i(TAG, "登录失败\nerror=" + error);
+                    LogUtil.e(TAG, "failure,codeMap=" + BaseMsgCode.codeMap);
+                    Log.i(TAG, "登录失败\nerror=" + BaseMsgCode.parseBLECodeMessage(msgCode));
                     ToastUtil.showToast("登录失败");
                 }
             });
