@@ -6,8 +6,8 @@ android {
         applicationId "com.yunds.dsmplatform"
         minSdkVersion Integer.parseInt(minSdkVersionG)
         targetSdkVersion Integer.parseInt(targetSdkVersionG)
-        versionCode 1
-        versionName "1.0"
+        versionCode 5
+        versionName "1.0.5"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
