@@ -206,7 +206,7 @@ public class NoHttpUtil {
                         e.printStackTrace();
                     }
                     if (msgCode != 0) {
-                        BaseMsgCode.codeMap.put(msgCode, msg);
+                        BaseMsgCode.codeMap.put(msgCode, msg + "|INFO");
                     }
                     if (jsonObject.getInt("status") == 1) {
                         listener.onFinish(true, data, msgCode);
