@@ -35,6 +35,9 @@ public class MainActivity extends Activity implements View.OnClickListener {
         LogUtil.e(TAG, "onCreate,codeMap=" + BaseMsgCode.codeMap);
         findViewById(R.id.loginBtn).setOnClickListener(this);
         progressDialog = new ProgressDialog(this);
+        LogUtil.e(TAG, "-60031=" + BaseMsgCode.getMessage(-60031, "====-60031==="));
+        LogUtil.e(TAG, "-60013=" + BaseMsgCode.getMessage(-60013, "====-60014==="));
+
     }
 
     @Override

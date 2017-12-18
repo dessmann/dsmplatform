@@ -83,4 +83,28 @@ public class BaseMsgCode {
         }
         return bleLevelMessage;
     }
+
+    /**
+     * 判断消息码表示的消息是否是前台用户需要的消息
+     */
+    public static boolean logForUser(int msgCode) {
+        return getBLECodeMessageLevel(msgCode) <= Log.INFO;
+    }
+
+    /**
+     * 判断消息码表示的消息是否是系统的消息
+     */
+    public static boolean logForSystem(int msgCode) {
+        return getBLECodeMessageLevel(msgCode) > Log.INFO;
+    }
+
+    /**
+     * 获取消息码表示的消息，如果消息码为非用户消息，则显示为替换消息
+     */
+    public static String getMessage(int msgCode, String replaceMsg) {
+        if (logForUser(msgCode)) {
+            return parseBLECodeMessage(msgCode);
+        }
+        return replaceMsg;
+    }
 }
