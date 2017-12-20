@@ -4,6 +4,7 @@
         <item>60001#The id number is valid|INFO</item>
         <item>60002#Local music selection succeeds|INFO</item>
         <item>60003#Cancel local music selection|INFO</item>
+        <item>60004#Success|INFO</item>
         <item>-60000#Server exception|INFO</item>
         <item>-60001#system error|INFO</item>
         <item>-60002#Network connection exception, please check the network#INFO</item>

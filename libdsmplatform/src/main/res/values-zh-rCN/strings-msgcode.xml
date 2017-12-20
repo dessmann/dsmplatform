@@ -4,6 +4,7 @@
         <item>60001#身份证号码有效|INFO</item>
         <item>60002#本地音乐选择成功|INFO</item>
         <item>60003#取消本地音乐选择|INFO</item>
+        <item>60004#操作成功|INFO</item>
         <item>-60000#服务器异常|INFO</item>
         <item>-60001#系统异常|INFO</item>
         <item>-60002#网络连接异常，请检查网络#INFO</item>

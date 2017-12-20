@@ -199,19 +199,20 @@ public class NoHttpUtil {
                 try {
                     JSONObject jsonObject = new JSONObject(response.get());
                     String msg = jsonObject.getString("msg");
-                    Integer msgCode = 0;
-                    try {
-                        msgCode = jsonObject.getInt("errorCode");
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                    if (msgCode != 0) {
-                        BaseMsgCode.codeMap.put(msgCode, msg + "|INFO");
-                    }
-                    if (jsonObject.getInt("status") == 1) {
-                        listener.onFinish(true, data, msgCode);
+                    if (jsonObject.getInt("status") == HTTP_REQUEST_SUCCESS) {
+                        listener.onFinish(true, data, 60004);
                     } else {
-                        LogUtil.e(TAG, "url=" + response.request().url() + "\n协议状态验证失败");
+                        Integer msgCode = -600001;//默认错误码为系统异常错误码
+                        try {
+                            msgCode = jsonObject.getInt("errorCode");
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            LogUtil.e(TAG, "这是一条模拟服务器的消息，看到此消息，表示服务器暂不支持消息码");
+                        }
+                        if (msgCode != -60001) {
+                            BaseMsgCode.codeMap.put(msgCode, msg);
+                        }
+                        LogUtil.e(TAG, "url=" + response.request().url() + "\n协议状态验证失败" + ",errorCode=" + msgCode);
                         listener.onFinish(false, null, msgCode);
                     }
                 } catch (JSONException e) {
@@ -406,25 +407,24 @@ public class NoHttpUtil {
                 int status = jsonResult.getInt("status");
                 String data = jsonResult.getString("data");
                 String msg = jsonResult.getString("msg");
-                Integer msgCode = 0;
-                try {
-                    msgCode = jsonResult.getInt("errorCode");
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    msgCode = -99999;
-                    msg = "这是一条模拟服务器的消息，看到此消息，表示服务器赞不支持消息码|INFO";
-                }
-                if (msgCode != 0) {
-                    BaseMsgCode.codeMap.put(msgCode, msg);
-                }
-                LogUtil.i(TAG, "status=" + status + "\ndata=" + data + "\nmsg=" + msg + "\nmsgCode=" + msgCode);
+                LogUtil.i(TAG, "status=" + status + "\ndata=" + data + "\nmsg=" + msg);
                 if (status != HTTP_REQUEST_SUCCESS) {
-                    LogUtil.i(TAG, "status=" + status + "\nurl=" + response.request().url());
+                    Integer msgCode = -600001;//错误码为系统异常错误码
+                    try {
+                        msgCode = jsonResult.getInt("errorCode");
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                        LogUtil.e(TAG, "这是一条模拟服务器的消息，看到此消息，表示服务器暂不支持消息码");
+                    }
+                    if (msgCode != -60001) {
+                        BaseMsgCode.codeMap.put(msgCode, msg);
+                    }
+                    LogUtil.i(TAG, "status=" + status + "\nurl=" + response.request().url() + ",errorCode=" + msgCode);
                     onFinish(false, null, msgCode);
                     return;
                 }
                 List list = BeanUtil.antiSerializationJsonString(data, clazz);
-                onFinish(true, list, msgCode);
+                onFinish(true, list, 60004);
             } catch (JSONException e) {
                 e.printStackTrace();
                 LogUtil.e(TAG, "url=" + response.request().url() + " ,error=" + e.getMessage());
