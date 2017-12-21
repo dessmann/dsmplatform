@@ -383,9 +383,9 @@ public class DeviceLockBase {
         }
         DeviceLockBase deviceLockBase = (DeviceLockBase) obj;
         devTypeCode = devTypeCode == null ? "" : devTypeCode;
-        return (devType.equals(deviceLockBase.getDevType())
-                || devTypeCode.equals(deviceLockBase.getDevTypeCode()))
-                && meterType.equals(deviceLockBase.getMeterType())
-                && appVersion.equals(deviceLockBase.getAppVersion());
+        return ((devType + "").equalsIgnoreCase(deviceLockBase.getDevType() +"")
+                || devTypeCode.equalsIgnoreCase(deviceLockBase.getDevTypeCode()))
+                && meterType.equalsIgnoreCase(deviceLockBase.getMeterType())
+                && appVersion.equalsIgnoreCase(deviceLockBase.getAppVersion());
     }
 }

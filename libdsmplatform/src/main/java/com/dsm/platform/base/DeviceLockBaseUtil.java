@@ -5,18 +5,16 @@ import android.text.TextUtils;
 import com.dsm.platform.DsmLibrary;
 import com.dsm.platform.util.log.LogUtil;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
- * DeviceLockBaseUtil
- *
- * @author SJL
- * @date 2017/6/14
+ * 获取锁具基础数据
  */
-
 public class DeviceLockBaseUtil {
 
     private static final String TAG = "DeviceLockBaseUtil";
+    private static List<DeviceLockBase> deviceLockBaseList = new ArrayList<>();
 
     /**
      * 获取锁具基础数据
@@ -35,32 +33,100 @@ public class DeviceLockBaseUtil {
                 meterType = "";
                 softwareVersion = "";
             } else {
+                meterType = meterType.toUpperCase();
                 if (TextUtils.isEmpty(softwareVersion)) {
                     //固件版本号为空，根据设备类型和设备型号取数据
                     softwareVersion = "";
+                } else {
+                    softwareVersion = softwareVersion.toUpperCase();
                 }
             }
             if ("temp".equalsIgnoreCase(deviceType)) {
                 deviceType = "lock";
             }
-            String where = String.format("(devType='%s' or devTypeCode='%s') and meterType='%s' and %s",
-                    deviceType, deviceType, meterType, TextUtils.isEmpty(softwareVersion) ? "appVersion=''" : String.format("appVersion like '%%%s%%'", softwareVersion.length() > 8 ? softwareVersion.substring(softwareVersion.length() - 8, softwareVersion.length()) : softwareVersion));
-            List<DeviceLockBase> list = DsmLibrary.getInstance().getFinalDb().findAllByWhere(DeviceLockBase.class, where);
-            if (list == null || list.size() == 0) {
-                if (!TextUtils.isEmpty(softwareVersion)) {
-                    //三个字段匹配无数据时按照两个字段的匹配
-                    deviceLockBase = getDeviceLock(deviceType, meterType, null);
-                } else {
-                    //两个字段匹配无数据时按照一个字段的匹配
-                    if (!TextUtils.isEmpty(meterType)) {
-                        deviceLockBase = getDeviceLock(deviceType, null, null);
-                    }
-                }
-            } else {
-                deviceLockBase = list.get(0);
+            //先在内存查找
+            deviceLockBase = getDeviceLockBaseOnRaw(deviceType, meterType, softwareVersion);
+            if (deviceLockBase == null) {//内存中没找到，继续在本地数据库查找
+                deviceLockBase = getDeviceLockBaseOnSqlite(deviceType, meterType, softwareVersion);
             }
         }
-        LogUtil.i(TAG, deviceLockBase == null ? "未获取到配置" : "获取配置成功，当前配置=" + deviceLockBase);
+        return deviceLockBase;
+    }
+
+    /**
+     * 内存查找设备配置信息
+     */
+    private static DeviceLockBase getDeviceLockBaseOnRaw(String deviceType, String meterType, String softwareVersion) {
+        DeviceLockBase deviceLockBase = null;
+        for (DeviceLockBase deviceLockBase_ :
+                deviceLockBaseList) {
+            if ((((deviceLockBase_.getDevType() + "").equalsIgnoreCase(deviceType)) || ((deviceLockBase_.getDevTypeCode() + "").equalsIgnoreCase(deviceType)))
+                    && deviceLockBase_.getMeterType().equalsIgnoreCase(meterType)
+                    && (TextUtils.isEmpty(softwareVersion) ? TextUtils.isEmpty(deviceLockBase_.getAppVersion()) : softwareVersion.length() > 8 ? deviceLockBase_.getAppVersion().contains(softwareVersion.substring(softwareVersion.length() -8)) : deviceLockBase_.getAppVersion().contains(softwareVersion))) {
+                deviceLockBase = deviceLockBase_;
+                break;
+            }
+        }
+        if (deviceLockBase != null && !TextUtils.isEmpty(deviceType) && !TextUtils.isEmpty(meterType) && !TextUtils.isEmpty(softwareVersion)) {
+            LogUtil.i(TAG, "内存中设备配置信息三个字段匹配成功,deviceLockBase=" + deviceLockBase);
+        }
+        if (deviceLockBase == null) {
+            if (!TextUtils.isEmpty(softwareVersion)) {//内存中三个字段匹配无数据时按照两个字段的匹配
+                deviceLockBase = getDeviceLockBaseOnRaw(deviceType, meterType, null);
+                if (deviceLockBase != null) {
+                    LogUtil.i(TAG, "内存中设备配置信息二个字段匹配成功,deviceLockBase=" + deviceLockBase);
+                }
+            } else {
+                if (!TextUtils.isEmpty(meterType)) {//内存中两个字段匹配无数据时按照一个字段的匹配
+                    deviceLockBase = getDeviceLockBaseOnRaw(deviceType, null, null);
+                    if (deviceLockBase != null) {
+                        LogUtil.i(TAG, "内存中设备配置信息一个字段匹配成功,deviceLockBase=" + deviceLockBase);
+                    }
+                }
+            }
+        }
+        return deviceLockBase;
+    }
+
+    /**
+     * 本地数据库查找设备配置信息
+     */
+    private static DeviceLockBase getDeviceLockBaseOnSqlite(String deviceType, String meterType, String softwareVersion) {
+        DeviceLockBase deviceLockBase = null;
+        String where = String.format("(devType='%s' or devTypeCode='%s') and meterType='%s' and %s",
+                deviceType, deviceType, meterType, TextUtils.isEmpty(softwareVersion) ? "appVersion=''" : String.format("appVersion like '%%%s%%'", softwareVersion.length() > 8 ? softwareVersion.substring(softwareVersion.length() - 8, softwareVersion.length()) : softwareVersion));
+        List<DeviceLockBase> list = DsmLibrary.getInstance().getFinalDb().findAllByWhere(DeviceLockBase.class, where);
+        if (list == null || list.size() == 0) {
+            if (!TextUtils.isEmpty(softwareVersion)) {
+                //三个字段匹配无数据时按照两个字段的匹配
+                deviceLockBase = getDeviceLockBaseOnSqlite(deviceType, meterType, null);
+                if (deviceLockBase != null) {
+                    LogUtil.i(TAG, "数据库中设备配置信息二个字段匹配成功,deviceLockBase=" + deviceLockBase);
+                }
+                if (deviceLockBase != null && !deviceLockBaseList.contains(deviceLockBase)) {
+                    deviceLockBaseList.add(deviceLockBase);
+                }
+            } else {
+                //两个字段匹配无数据时按照一个字段的匹配
+                if (!TextUtils.isEmpty(meterType)) {
+                    deviceLockBase = getDeviceLockBaseOnSqlite(deviceType, null, null);
+                    if (deviceLockBase != null) {
+                        LogUtil.i(TAG, "数据库中设备配置信息一个字段匹配成功,deviceLockBase=" + deviceLockBase);
+                    }
+                    if (deviceLockBase != null && !deviceLockBaseList.contains(deviceLockBase)) {
+                        deviceLockBaseList.add(deviceLockBase);
+                    }
+                }
+            }
+        } else {
+            deviceLockBase = list.get(0);
+            if (deviceLockBase != null && !TextUtils.isEmpty(deviceType) && !TextUtils.isEmpty(meterType) && !TextUtils.isEmpty(softwareVersion)) {
+                LogUtil.i(TAG, "数据库中设备配置信息三个字段匹配成功,deviceLockBase=" + deviceLockBase);
+            }
+            if (deviceLockBase != null && !deviceLockBaseList.contains(deviceLockBase)) {
+                deviceLockBaseList.add(deviceLockBase);
+            }
+        }
         return deviceLockBase;
     }
 
